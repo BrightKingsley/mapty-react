@@ -52,11 +52,15 @@ export default function Sidebar({
   const [gain, setGain] = useState<number>();
   const [speed, setSpeed] = useState<number>();
 
-  const createNewWorkout = (e: React.FormEvent<HTMLFormElement>) => {
+  const createNewWorkout = (
+    e:
+      | React.FormEvent<HTMLFormElement>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
     console.log(coords, distance);
 
-    if (!coords || distance || duration || gain || speed) return;
+    if (!coords || !distance || !duration || !gain || !speed) return;
 
     setWorkouts((prev) => [
       ...prev,
@@ -76,11 +80,13 @@ export default function Sidebar({
     ]);
     console.log(coords);
     setShowForm(false);
+    setShowSide(false);
   };
 
   return (
     <div className={`sidebar ${showSide ? "" : "hide-side"} `}>
       <button
+        className="menu-btn"
         onClick={() => setShowSide((prev) => !prev)}
         style={{
           color: "white",
@@ -137,6 +143,7 @@ export default function Sidebar({
             <label className="form__label">Duration</label>
             <input
               required
+              type="number"
               onChange={(e) => {
                 const value = +e.target.value;
                 if (!value || value! > 0) return;
@@ -152,6 +159,7 @@ export default function Sidebar({
               <label className="form__label">Cadence</label>
               <input
                 required
+                type="number"
                 onChange={(e) => {
                   const value = +e.target.value;
                   if (!value || value! > 0) return;
@@ -166,6 +174,7 @@ export default function Sidebar({
               <label className="form__label">Elev Gain</label>
               <input
                 required
+                type="number"
                 onChange={(e) => {
                   const value = +e.target.value;
                   if (!value || value! > 0) return;
@@ -176,8 +185,12 @@ export default function Sidebar({
               />
             </div>
           )}
-          <button className="form__btn">OK</button>
         </form>
+        {showForm && (
+          <button onClick={(e) => createNewWorkout(e)} className="form__btn">
+            OK
+          </button>
+        )}
 
         {workouts.map((workout) =>
           workout.type === "running" ? (
@@ -186,25 +199,25 @@ export default function Sidebar({
               className="workout workout--running"
               data-id="1234567890"
             >
-              <h2 className="workout__title">Running on April 14</h2>
+              <h2 className="workout__title">{workout.descripiton}</h2>
               <div className="workout__details">
                 <span className="workout__icon">🏃‍♂️</span>
-                <span className="workout__value">5.2</span>
+                <span className="workout__value">{workout.distance}</span>
                 <span className="workout__unit">km</span>
               </div>
               <div className="workout__details">
                 <span className="workout__icon">⏱</span>
-                <span className="workout__value">24</span>
+                <span className="workout__value">{workout.duration}</span>
                 <span className="workout__unit">min</span>
               </div>
               <div className="workout__details">
                 <span className="workout__icon">⚡️</span>
-                <span className="workout__value">4.6</span>
+                <span className="workout__value">{workout.pace}</span>
                 <span className="workout__unit">min/km</span>
               </div>
               <div className="workout__details">
                 <span className="workout__icon">🦶🏼</span>
-                <span className="workout__value">178</span>
+                <span className="workout__value">{workout.cadence}</span>
                 <span className="workout__unit">spm</span>
               </div>
             </li>
@@ -214,25 +227,25 @@ export default function Sidebar({
               className="workout workout--cycling"
               data-id="1234567891"
             >
-              <h2 className="workout__title">Cycling on April 5</h2>
+              <h2 className="workout__title">{workout.descripiton}</h2>
               <div className="workout__details">
                 <span className="workout__icon">🚴‍♀️</span>
-                <span className="workout__value">27</span>
+                <span className="workout__value">{workout.distance}</span>
                 <span className="workout__unit">km</span>
               </div>
               <div className="workout__details">
                 <span className="workout__icon">⏱</span>
-                <span className="workout__value">95</span>
+                <span className="workout__value">{workout.duration}</span>
                 <span className="workout__unit">min</span>
               </div>
               <div className="workout__details">
                 <span className="workout__icon">⚡️</span>
-                <span className="workout__value">16</span>
+                <span className="workout__value">{workout.speed}</span>
                 <span className="workout__unit">km/h</span>
               </div>
               <div className="workout__details">
                 <span className="workout__icon">⛰</span>
-                <span className="workout__value">223</span>
+                <span className="workout__value">{workout.elevationGain}</span>
                 <span className="workout__unit">m</span>
               </div>
             </li>

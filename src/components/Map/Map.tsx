@@ -8,6 +8,7 @@ export default function Map({ displayForm, locations, setShowSide }: MapProps) {
   return (
     <>
       <button
+        className="menu-btn"
         onClick={() => setShowSide((prev) => !prev)}
         style={{
           color: "white",
@@ -17,8 +18,8 @@ export default function Map({ displayForm, locations, setShowSide }: MapProps) {
           padding: "0.5rem",
           zIndex: 100000000,
           position: "absolute",
-          top:"3rem",
-          right: "5rem",
+          top: "1rem",
+          right: "1rem",
           backgroundColor: "grey",
           alignSelf: "end",
           cursor: "pointer",

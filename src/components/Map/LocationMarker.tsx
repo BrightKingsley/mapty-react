@@ -9,13 +9,13 @@ export default function LocationMarker({ position }: LocationMarkerProps) {
 
   if (!position) return null;
 
-  useEffect(() => {
-    const marker = markerRef.current;
-    if(marker){
-        //@ts-ignore
-        marker.openPopup()
-    }
-  }, []);
+//   useEffect(() => {
+//     const marker = markerRef.current;
+//     if(marker){
+//         //@ts-ignore
+//         marker.openPopup()
+//     }
+//   }, []);
 
   return position === undefined ? null : (
     <Marker position={position} ref={markerRef}>
