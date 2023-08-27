@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SidebarProps } from "../types";
 import { Cycling, Running, Workout } from "../../models/Workout";
 import { useMap } from "react-leaflet";
 import { motion } from "framer-motion";
 import { BiCaretDownCircle, BiMenu, BiX } from "react-icons/bi";
 import { Collapsible } from "react-materialize";
+import AppContext from "../../context/appContext";
 /**
  * 
  * @param param0 
@@ -37,21 +38,22 @@ const months = [
   "December",
 ];
 
-export default function Sidebar({
-  coords,
-  showForm,
-  showSide,
-  setShowSide,
-  setWorkouts,
-  setShowForm,
-  workouts,
-}: SidebarProps) {
+export default function Sidebar({ coords }: SidebarProps) {
+  const {
+    showForm,
+    setShowForm,
+    setWorkouts,
+    setShowSide,
+    setCurrentWorkout,
+    showSide,
+    workouts,
+  } = useContext(AppContext);
+
   const [type, setType] = useState<"running" | "cycling">("running");
 
   const [distance, setDistance] = useState<number | string>("");
   const [duration, setDuration] = useState<number | string>("");
   const [gain, setGain] = useState<number | string>("");
-  const [speed, setSpeed] = useState<number | null>();
 
   const createNewWorkout = (
     e:
@@ -71,26 +73,29 @@ export default function Sidebar({
       } ${new Date().getDate()}`
     );
 
+    const newWorkout = {
+      id: (Date.now() + "").slice(-10),
+      descripiton: `${type[0].toUpperCase()}${type.slice(1)} on ${
+        months[new Date().getMonth()]
+      } ${new Date().getDate()}`,
+      date: new Date(),
+      coords,
+      distance,
+      duration,
+      [type === "running" ? "cadence" : "elevationGain"]: gain,
+      [type === "running" ? "pace" : "speed"]: +duration / +distance,
+      type,
+    };
+
     setWorkouts((prev) => [
-      ...prev,
-      {
-        id: (Date.now() + "").slice(-10),
-        descripiton: `${type[0].toUpperCase()}${type.slice(1)} on ${
-          months[new Date().getMonth()]
-        } ${new Date().getDate()}`,
-        date: new Date(),
-        coords,
-        distance,
-        duration,
-        [type === "running" ? "cadence" : "elevationGain"]: gain,
-        [type === "running" ? "pace" : "speed"]: +duration / +distance,
-        type,
-      },
+      ...prev,newWorkout
+      ,
     ]);
     console.log(coords);
     setDistance("");
     setDuration("");
     setGain("");
+    setCurrentWorkout(newWorkout)
     setShowForm(false);
     setShowSide(false);
   };
@@ -106,7 +111,7 @@ export default function Sidebar({
       <button
         className="menu-btn"
         onClick={() => {
-          setShowForm(false)
+          setShowForm(false);
           setShowSide((prev) => !prev);
         }}
         style={{
@@ -138,7 +143,7 @@ export default function Sidebar({
               alignSelf: "end",
               cursor: "pointer",
               borderRadius: "0.5rem",
-              marginLeft: -20,
+              marginRight: -15,
               marginTop: -20,
               position: "absolute",
             }}
@@ -242,6 +247,10 @@ export default function Sidebar({
         {workouts.map((workout) =>
           workout.type === "running" ? (
             <li
+              onClick={() => {
+                setShowSide(false);
+                setCurrentWorkout(workout);
+              }}
               key={workout.id}
               className="workout workout--running"
               data-id="1234567890"
@@ -273,6 +282,10 @@ export default function Sidebar({
           ) : (
             <li
               key={workout.id}
+              onClick={() => {
+                setShowSide(false);
+                setCurrentWorkout(workout);
+              }}
               className="workout workout--cycling"
               data-id="1234567891"
             >

@@ -3,9 +3,13 @@ import LocationMarker from "./LocationMarker";
 import { MapProps } from "../types";
 import SetLocations from "./SetLocations";
 import { BiMenu } from "react-icons/bi";
+import AppContext from "../../context/appContext";
+import { useContext } from "react";
 
-export default function Map({ displayForm, workouts, setShowSide }: MapProps) {
-console.log("WORKSSS==>",workouts)
+export default function Map({ }: MapProps) {
+  const { setShowSide, workouts } = useContext(AppContext);
+
+  console.log("WORKSSS==>", workouts);
 
   return (
     <>
@@ -35,9 +39,9 @@ console.log("WORKSSS==>",workouts)
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
         />
-        <SetLocations displayForm={displayForm} setShowSide={setShowSide} />
+        <SetLocations />
         {workouts?.map((workout) => (
-          <LocationMarker key={Math.random()} workout={workout} />
+          <LocationMarker key={workout.id}  workout={workout}/>
         ))}
       </MapContainer>
     </>
