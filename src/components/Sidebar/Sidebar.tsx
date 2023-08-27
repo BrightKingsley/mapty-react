@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SidebarProps } from "../types";
 import { Cycling, Running, Workout } from "../../models/Workout";
 import { useMap } from "react-leaflet";
 import { motion } from "framer-motion";
-import { BiMenu } from "react-icons/bi";
+import { BiCaretDownCircle, BiMenu, BiX } from "react-icons/bi";
+import { Collapsible } from "react-materialize";
 /**
  * 
  * @param param0 
@@ -47,9 +48,9 @@ export default function Sidebar({
 }: SidebarProps) {
   const [type, setType] = useState<"running" | "cycling">("running");
 
-  const [distance, setDistance] = useState<number| string>("");
-  const [duration, setDuration] = useState<number| string>("");
-  const [gain, setGain] = useState<number| string>("");
+  const [distance, setDistance] = useState<number | string>("");
+  const [duration, setDuration] = useState<number | string>("");
+  const [gain, setGain] = useState<number | string>("");
   const [speed, setSpeed] = useState<number | null>();
 
   const createNewWorkout = (
@@ -60,8 +61,7 @@ export default function Sidebar({
     e.preventDefault();
     console.log(coords, distance);
 
-    if (!coords || !distance || !duration || !gain) return;
-
+    if (!coords || !distance || !duration || !gain) return alert("please input valid data");
 
     console.log(
       "TYPETHINGS",
@@ -94,6 +94,12 @@ export default function Sidebar({
     setShowSide(false);
   };
 
+  useEffect(() => {
+    window.addEventListener("keydown", (e) => {
+      e.code === "Escape" && setShowForm(false);
+    });
+  }, []);
+
   return (
     <div className={`sidebar ${showSide ? "" : "hide-side"} `}>
       <button
@@ -115,6 +121,27 @@ export default function Sidebar({
       <img src="/assets/logo.png" alt="Logo" className="logo" />
 
       <ul className="workouts">
+        {showForm && (
+          <button
+            // className="menu-btn"
+            onClick={() => setShowForm(false)}
+            style={{
+              color: "white",
+              fontSize: 16,
+              width: "fit-content",
+              padding: "0.5rem",
+              backgroundColor: "darkgrey",
+              alignSelf: "end",
+              cursor: "pointer",
+              borderRadius: "0.5rem",
+              marginLeft: -20,
+              marginTop: -20,
+              position: "absolute",
+            }}
+          >
+            <BiX />
+          </button>
+        )}
         <form
           onSubmit={createNewWorkout}
           className={`form ${showForm ? "" : "hidden"}`}
