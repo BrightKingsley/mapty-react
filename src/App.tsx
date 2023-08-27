@@ -6,6 +6,8 @@ import { Cycling, Running } from "./models/Workout";
 function App() {
   const [showForm, setShowForm] = useState(false);
   const [newLocation, setNewLocation] = useState<LatLngExpression>();
+    const [showSide, setShowSide] = useState(true);
+
   const [workouts, setWorkouts] = useState<(Running | Cycling)[]>([]);
 
   // ADD_TYPES
@@ -22,6 +24,8 @@ function App() {
     <div className="app">
       <Sidebar
         coords={newLocation}
+        showSide={showSide}
+        setShowSide={setShowSide}
         showForm={showForm}
         workouts={workouts}
         setWorkouts={setWorkouts}
@@ -31,6 +35,7 @@ function App() {
         displayForm={displayForm}
         displayMarker={displayMarker}
         locations={workouts.map((workout) => workout.coords)}
+        setShowSide={setShowSide}
       />
     </div>
   );

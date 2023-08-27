@@ -34,6 +34,7 @@ html {
   display: flex;
 }
 
+
 /* GENERAL */
 a:link,
 a:visited {
@@ -47,6 +48,26 @@ a:visited {
   padding: 3rem 5rem 4rem 5rem;
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width:900px) {
+  .app{
+    padding: 0;
+  }
+  .sidebar{
+    width: 100%;
+    position: absolute;
+    left:0;
+    top: 0;
+    z-index: 1000000;
+  }
+
+  .hide-side{
+    transition: all 0.2s;
+    /* width: 0; */
+    transform: translateX(-100%);
+  }
+  
 }
 
 .logo {

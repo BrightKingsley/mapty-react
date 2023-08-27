@@ -2,7 +2,8 @@ import { useState } from "react";
 import { SidebarProps } from "../types";
 import { Cycling, Running, Workout } from "../../models/Workout";
 import { useMap } from "react-leaflet";
-
+import { motion } from "framer-motion";
+import { BiMenu } from "react-icons/bi";
 /**
  * 
  * @param param0 
@@ -38,6 +39,8 @@ const months = [
 export default function Sidebar({
   coords,
   showForm,
+  showSide,
+  setShowSide,
   setWorkouts,
   setShowForm,
   workouts,
@@ -51,7 +54,7 @@ export default function Sidebar({
 
   const createNewWorkout = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(coords,distance);
+    console.log(coords, distance);
 
     if (!coords || distance || duration || gain || speed) return;
 
@@ -71,12 +74,27 @@ export default function Sidebar({
         type,
       },
     ]);
-    console.log(coords)
+    console.log(coords);
     setShowForm(false);
   };
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${showSide ? "" : "hide-side"} `}>
+      <button
+        onClick={() => setShowSide((prev) => !prev)}
+        style={{
+          color: "white",
+          fontSize: 16,
+          width: "fit-content",
+          padding: "0.5rem",
+          backgroundColor: "transparent",
+          alignSelf: "end",
+          cursor: "pointer",
+          borderRadius: "0.5rem",
+        }}
+      >
+        <BiMenu />
+      </button>
       <img src="/assets/logo.png" alt="Logo" className="logo" />
 
       <ul className="workouts">
