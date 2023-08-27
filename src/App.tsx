@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Map, Sidebar } from "./components";
 import { LatLngExpression } from "leaflet";
 import { Cycling, Running } from "./models/Workout";
@@ -6,12 +6,12 @@ import { Cycling, Running } from "./models/Workout";
 function App() {
   const [showForm, setShowForm] = useState(false);
   const [newLocation, setNewLocation] = useState<LatLngExpression>();
-    const [showSide, setShowSide] = useState(true);
+  const [showSide, setShowSide] = useState(true);
 
   const [workouts, setWorkouts] = useState<(Running | Cycling)[]>([]);
 
   // ADD_TYPES
-  const displayForm = (latlng :  LatLngExpression ) => {
+  const displayForm = (latlng: LatLngExpression) => {
     setNewLocation(latlng);
     setShowForm(true);
   };
@@ -19,6 +19,14 @@ function App() {
   const displayMarker = () => {
     if (!newLocation) return;
   };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowSide(false);
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <div className="app">
