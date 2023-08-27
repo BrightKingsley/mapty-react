@@ -6,8 +6,8 @@ import { BiMenu } from "react-icons/bi";
 import AppContext from "../../context/appContext";
 import { useContext } from "react";
 
-export default function Map({ }: MapProps) {
-  const { setShowSide, workouts } = useContext(AppContext);
+export default function Map({}: MapProps) {
+  const { currentWorkout, setShowSide, workouts } = useContext(AppContext);
 
   console.log("WORKSSS==>", workouts);
 
@@ -41,8 +41,10 @@ export default function Map({ }: MapProps) {
         />
         <SetLocations />
         {workouts?.map((workout) => (
-          <LocationMarker key={workout.id}  workout={workout}/>
+          <LocationMarker key={workout.id} workout={workout} />
         ))}
+
+        {currentWorkout && <LocationMarker workout={currentWorkout} />}
       </MapContainer>
     </>
   );
