@@ -4,7 +4,7 @@ import { Cycling, Running } from "../models/Workout";
 export type MapProps = {
   displayForm: Function;
   displayMarker: Function;
-  locations: LatLngExpression[] | undefined;
+  workouts: (Running | Cycling)[];
   setShowSide: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -19,7 +19,7 @@ export type SidebarProps = {
 };
 
 export type LocationMarkerProps = {
-  position: LatLngExpression | undefined;
+  workout: Running | Cycling;
 };
 
 export type SetLocationsProps = {

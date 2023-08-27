@@ -4,7 +4,9 @@ import { MapProps } from "../types";
 import SetLocations from "./SetLocations";
 import { BiMenu } from "react-icons/bi";
 
-export default function Map({ displayForm, locations, setShowSide }: MapProps) {
+export default function Map({ displayForm, workouts, setShowSide }: MapProps) {
+console.log("WORKSSS==>",workouts)
+
   return (
     <>
       <button
@@ -34,8 +36,8 @@ export default function Map({ displayForm, locations, setShowSide }: MapProps) {
           url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
         />
         <SetLocations displayForm={displayForm} setShowSide={setShowSide} />
-        {locations?.map((location) => (
-          <LocationMarker key={Math.random()} position={location} />
+        {workouts?.map((workout) => (
+          <LocationMarker key={Math.random()} workout={workout} />
         ))}
       </MapContainer>
     </>

@@ -34,7 +34,7 @@ function App() {
       <Map
         displayForm={displayForm}
         displayMarker={displayMarker}
-        locations={workouts.map((workout) => workout.coords)}
+        workouts={workouts}
         setShowSide={setShowSide}
       />
     </div>

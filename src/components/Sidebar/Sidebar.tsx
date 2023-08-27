@@ -47,9 +47,9 @@ export default function Sidebar({
 }: SidebarProps) {
   const [type, setType] = useState<"running" | "cycling">("running");
 
-  const [distance, setDistance] = useState<number | null>();
-  const [duration, setDuration] = useState<number | null>();
-  const [gain, setGain] = useState<number | null>();
+  const [distance, setDistance] = useState<number| string>("");
+  const [duration, setDuration] = useState<number| string>("");
+  const [gain, setGain] = useState<number| string>("");
   const [speed, setSpeed] = useState<number | null>();
 
   const createNewWorkout = (
@@ -62,11 +62,19 @@ export default function Sidebar({
 
     if (!coords || !distance || !duration || !gain) return;
 
+
+    console.log(
+      "TYPETHINGS",
+      `${type[0].toUpperCase()}${type.slice(1)} on ${
+        months[new Date().getMonth()]
+      } ${new Date().getDate()}`
+    );
+
     setWorkouts((prev) => [
       ...prev,
       {
         id: (Date.now() + "").slice(-10),
-        description: `${type[0].toUpperCase()}${type.slice(1)} on ${
+        descripiton: `${type[0].toUpperCase()}${type.slice(1)} on ${
           months[new Date().getMonth()]
         } ${new Date().getDate()}`,
         date: new Date(),
@@ -74,15 +82,14 @@ export default function Sidebar({
         distance,
         duration,
         [type === "running" ? "cadence" : "elevationGain"]: gain,
-        [type === "running" ? "pace" : "speed"]: duration / distance,
+        [type === "running" ? "pace" : "speed"]: +duration / +distance,
         type,
       },
     ]);
     console.log(coords);
-    setDistance(null);
-    setDuration(null);
-    setGain(null);
-    setSpeed(null);
+    setDistance("");
+    setDuration("");
+    setGain("");
     setShowForm(false);
     setShowSide(false);
   };
@@ -133,6 +140,7 @@ export default function Sidebar({
             <label className="form__label">Distance</label>
             <input
               required
+              value={distance}
               onChange={(e) => {
                 const value = +e.target.value;
                 console.log(value);
@@ -148,6 +156,7 @@ export default function Sidebar({
             <label className="form__label">Duration</label>
             <input
               required
+              value={duration}
               type="number"
               onChange={(e) => {
                 const value = +e.target.value;
@@ -164,6 +173,7 @@ export default function Sidebar({
               <label className="form__label">Cadence</label>
               <input
                 required
+                value={gain}
                 type="number"
                 onChange={(e) => {
                   const value = +e.target.value;
@@ -179,10 +189,11 @@ export default function Sidebar({
               <label className="form__label">Elev Gain</label>
               <input
                 required
+                value={gain}
                 type="number"
                 onChange={(e) => {
                   const value = +e.target.value;
-                  if (!value || value! > 0) return;
+                  if (!value || value < 1) return;
                   setGain(value);
                 }}
                 className="form__input form__input--elevation"
@@ -217,7 +228,9 @@ export default function Sidebar({
               </div>
               <div className="workout__details">
                 <span className="workout__icon">⚡️</span>
-                <span className="workout__value">{workout.pace}</span>
+                <span className="workout__value">
+                  {workout.pace.toFixed(1)}
+                </span>
                 <span className="workout__unit">min/km</span>
               </div>
               <div className="workout__details">
@@ -245,7 +258,9 @@ export default function Sidebar({
               </div>
               <div className="workout__details">
                 <span className="workout__icon">⚡️</span>
-                <span className="workout__value">{workout.speed}</span>
+                <span className="workout__value">
+                  {workout.speed.toFixed(1)}
+                </span>
                 <span className="workout__unit">km/h</span>
               </div>
               <div className="workout__details">
