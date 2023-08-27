@@ -61,7 +61,8 @@ export default function Sidebar({
     e.preventDefault();
     console.log(coords, distance);
 
-    if (!coords || !distance || !duration || !gain) return alert("please input valid data");
+    if (!coords || !distance || !duration || !gain)
+      return alert("please input valid data");
 
     console.log(
       "TYPETHINGS",
@@ -104,7 +105,10 @@ export default function Sidebar({
     <div className={`sidebar ${showSide ? "" : "hide-side"} `}>
       <button
         className="menu-btn"
-        onClick={() => setShowSide((prev) => !prev)}
+        onClick={() => {
+          setShowForm(false)
+          setShowSide((prev) => !prev);
+        }}
         style={{
           color: "white",
           fontSize: 16,
