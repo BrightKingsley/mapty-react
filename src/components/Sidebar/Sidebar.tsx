@@ -47,10 +47,10 @@ export default function Sidebar({
 }: SidebarProps) {
   const [type, setType] = useState<"running" | "cycling">("running");
 
-  const [distance, setDistance] = useState<number>();
-  const [duration, setDuration] = useState<number>();
-  const [gain, setGain] = useState<number>();
-  const [speed, setSpeed] = useState<number>();
+  const [distance, setDistance] = useState<number | null>();
+  const [duration, setDuration] = useState<number | null>();
+  const [gain, setGain] = useState<number | null>();
+  const [speed, setSpeed] = useState<number | null>();
 
   const createNewWorkout = (
     e:
@@ -60,7 +60,7 @@ export default function Sidebar({
     e.preventDefault();
     console.log(coords, distance);
 
-    if (!coords || !distance || !duration || !gain || !speed) return;
+    if (!coords || !distance || !duration || !gain) return;
 
     setWorkouts((prev) => [
       ...prev,
@@ -74,11 +74,15 @@ export default function Sidebar({
         distance,
         duration,
         [type === "running" ? "cadence" : "elevationGain"]: gain,
-        [type === "running" ? "pace" : "speed"]: speed,
+        [type === "running" ? "pace" : "speed"]: duration / distance,
         type,
       },
     ]);
     console.log(coords);
+    setDistance(null);
+    setDuration(null);
+    setGain(null);
+    setSpeed(null);
     setShowForm(false);
     setShowSide(false);
   };
@@ -131,7 +135,8 @@ export default function Sidebar({
               required
               onChange={(e) => {
                 const value = +e.target.value;
-                if (!value || value! > 0) return;
+                console.log(value);
+                if (!value || value < 1) return;
                 setDistance(value);
               }}
               type="number"
@@ -146,7 +151,7 @@ export default function Sidebar({
               type="number"
               onChange={(e) => {
                 const value = +e.target.value;
-                if (!value || value! > 0) return;
+                if (!value || value < 1) return;
                 setDuration(value);
               }}
               className="form__input form__input--duration"
@@ -162,7 +167,7 @@ export default function Sidebar({
                 type="number"
                 onChange={(e) => {
                   const value = +e.target.value;
-                  if (!value || value! > 0) return;
+                  if (!value || value < 1) return;
                   setGain(value);
                 }}
                 className="form__input form__input--cadence"
